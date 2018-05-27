@@ -5,7 +5,7 @@ This example illustrates how to use the efficient sub-pixel convolution layer de
 ```
 usage: main.py [-h] --upscale_factor UPSCALE_FACTOR [--batchSize BATCHSIZE]
                [--testBatchSize TESTBATCHSIZE] [--nEpochs NEPOCHS] [--lr LR]
-               [--cuda] [--threads THREADS] [--seed SEED]
+               [--cuda] [--threads THREADS] [--seed SEED] [--resume RESUME]
 
 PyTorch Super Res Example
 
@@ -62,7 +62,7 @@ optional arguments:
 Use the script `scrape_google_search_images.py` to scrape HD images from Google search results
 
 ```
-usage: scrape_google_search_images.py 
+usage: scrape_google_search_images.py [--search SEARCH] [--num_images NUM_IMAGES] [--directory DIRECTORY]
 
 Scrape Google images
 
