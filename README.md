@@ -24,13 +24,13 @@ optional arguments:
 
 #### Training on [BSD300 dataset](https://www2.eecs.berkeley.edu/Research/Projects/CS/vision/bsds/)
 
-	*Put root_dir = download_bsd300() in data.py file
+	Put root_dir = download_bsd300() in data.py file
 
 #### Training on your own dataset:
 
 	* Put root_dir = document_dataset() in data.py file
 	* Use the following folder structure:
-		* dataset
+		   dataset
 		   |
 		    --- document
 		        |
@@ -59,7 +59,7 @@ optional arguments:
 
 ## Create dataset by downloading HD images from Google
 
-Use the script 'scrape_google_search_images.py' to scrape HD images from Google search results
+Use the script `scrape_google_search_images.py` to scrape HD images from Google search results
 
 ```
 usage: scrape_google_search_images.py 
@@ -72,4 +72,4 @@ arguments:
   --directory           directory path to save results
 ```
 
-Point to Note: Script 'scrape_google_search_images.py' works well with Python 2.x version.
+Point to Note: Script `scrape_google_search_images.py` works well with Python 2.x version.
