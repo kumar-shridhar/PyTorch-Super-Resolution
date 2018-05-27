@@ -1,7 +1,7 @@
 from __future__ import print_function
 import argparse
 from math import log10
-
+import os
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -16,11 +16,15 @@ parser.add_argument('--batchSize', type=int, default=64, help='training batch si
 parser.add_argument('--testBatchSize', type=int, default=10, help='testing batch size')
 parser.add_argument('--nEpochs', type=int, default=2, help='number of epochs to train for')
 parser.add_argument('--lr', type=float, default=0.01, help='Learning Rate. Default=0.01')
-parser.add_argument('--cuda', action='store_true', help='use cuda?')
-parser.add_argument('--threads', type=int, default=4, help='number of threads for data loader to use')
+parser.add_argument('--cuda', action='store_true', help='use cuda?', default=True)
+parser.add_argument('--threads', type=int, default=8, help='number of threads for data loader to use')
 parser.add_argument('--seed', type=int, default=123, help='random seed to use. Default=123')
-opt = parser.parse_args()
+parser.add_argument('--resume', default='', type=str, metavar='PATH',
+                    help='path to latest checkpoint (default: none)')
 
+
+global opt
+opt = parser.parse_args()
 print(opt)
 
 if opt.cuda and not torch.cuda.is_available():
@@ -42,6 +46,21 @@ criterion = nn.MSELoss()
 
 optimizer = optim.Adam(model.parameters(), lr=opt.lr)
 
+#load a model from checkpoint
+
+if opt.resume:
+    if os.path.isfile(opt.resume):
+        print("=> loading checkpoint '{}'".format(opt.resume))
+        checkpoint = torch.load(opt.resume)
+        opt.start_epoch = checkpoint['epoch']
+        model.load_state_dict(checkpoint['state_dict'])
+        optimizer.load_state_dict(checkpoint['optimizer'])
+        print("=> loaded checkpoint '{}' (epoch {})"
+              .format(opt.resume, checkpoint['epoch']))
+    else:
+        print("=> no checkpoint found at '{}'".format(opt.resume))
+
+
 
 def train(epoch):
     epoch_loss = 0
@@ -61,6 +80,7 @@ def train(epoch):
 
 def test():
     avg_psnr = 0
+    model.eval()
     with torch.no_grad():
         for batch in testing_data_loader:
             input, target = batch[0].to(device), batch[1].to(device)
@@ -77,7 +97,21 @@ def checkpoint(epoch):
     torch.save(model, model_out_path)
     print("Checkpoint saved to {}".format(model_out_path))
 
+
+def save_checkpoint(state):
+    model_out_path = "model_epoch_{}.pth".format(epoch)
+    torch.save(state, model_out_path)
+    print("Checkpoint saved to {}".format(model_out_path))
+
+
 for epoch in range(1, opt.nEpochs + 1):
     train(epoch)
     test()
-    checkpoint(epoch)
+    #checkpoint(epoch)
+    save_checkpoint({
+        'epoch': epoch + 1,
+        'arch': model,
+        'state_dict': model.state_dict(),
+        'optimizer' : optimizer.state_dict(),
+    })
+

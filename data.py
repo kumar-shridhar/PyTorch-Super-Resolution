@@ -31,6 +31,13 @@ def download_bsd300(dest="dataset"):
     return output_image_dir
 
 
+def document_dataset(dest='dataset'):
+    output_image_dir = join(dest, "document/images")
+
+    return output_image_dir
+
+
+
 def calculate_valid_crop_size(crop_size, upscale_factor):
     return crop_size - (crop_size % upscale_factor)
 
@@ -51,7 +58,7 @@ def target_transform(crop_size):
 
 
 def get_training_set(upscale_factor):
-    root_dir = download_bsd300()
+    root_dir = document_dataset()
     train_dir = join(root_dir, "train")
     crop_size = calculate_valid_crop_size(256, upscale_factor)
 
@@ -61,7 +68,7 @@ def get_training_set(upscale_factor):
 
 
 def get_test_set(upscale_factor):
-    root_dir = download_bsd300()
+    root_dir = document_dataset()
     test_dir = join(root_dir, "test")
     crop_size = calculate_valid_crop_size(256, upscale_factor)
 

@@ -20,6 +20,7 @@ img = Image.open(opt.input_image).convert('YCbCr')
 y, cb, cr = img.split()
 
 model = torch.load(opt.model)
+model = model['arch']
 img_to_tensor = ToTensor()
 input = img_to_tensor(y).view(1, -1, y.size[1], y.size[0])
 

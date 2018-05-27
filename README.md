@@ -19,14 +19,57 @@ optional arguments:
   --cuda                use cuda
   --threads             number of threads for data loader to use Default=4
   --seed                random seed to use. Default=123
+  --resume              resume from checkpoint
 ```
-This example trains a super-resolution network on the [BSD300 dataset](https://www2.eecs.berkeley.edu/Research/Projects/CS/vision/bsds/), using crops from the 200 training images, and evaluating on crops of the 100 test images. A snapshot of the model after every epoch with filename model_epoch_<epoch_number>.pth
+
+#### Training on [BSD300 dataset](https://www2.eecs.berkeley.edu/Research/Projects/CS/vision/bsds/)
+
+	*Put root_dir = download_bsd300() in data.py file
+
+#### Training on your own dataset:
+
+	* Put root_dir = document_dataset() in data.py file
+	* Use the following folder structure:
+		* dataset
+		   |
+		    --- document
+		        |
+		         --- images
+		             |
+		              --- test
+		             |
+		              --- train 
+
+
+#### A snapshot of the model after every epoch with be saved as filename model_epoch_<epoch_number>.pth
 
 ## Example Usage:
-
+ 
 ### Train
 
 `python main.py --upscale_factor 3 --batchSize 4 --testBatchSize 100 --nEpochs 30 --lr 0.001`
 
 ### Super Resolve
+
 `python super_resolve.py --input_image dataset/BSDS300/images/test/16077.jpg --model model_epoch_500.pth --output_filename out.png`
+
+### Resume from Checkpoints
+
+`provide path with --resume arguement`
+
+## Create dataset by downloading HD images from Google
+
+Use the script 'scrape_google_search_images.py' to scrape HD images from Google search results
+
+```
+usage: scrape_google_search_images.py 
+
+Scrape Google images
+
+arguments:
+  --search              search term
+  --num_images          number of images to save
+  --directory           directory path to save results
+```
+
+Point to Note: Script 'scrape_google_search_images.py' works well with Python 2.x version.
